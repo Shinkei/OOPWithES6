@@ -1,41 +1,27 @@
-class Drone{
-    constructor(id, name){
-        console.log('in Drone Constructor');
-        console.log(id + ' ' + name);
-        this._id = id;
-        this._name = name;
+import $ from 'jquery';
+import {fleet} from './fleet-data.js';
+import {FleetDataService} from './services/fleet-data-service.js'
+import {ApplicationBase} from './framework/application-base.js';
+import {HomePage} from './pages/home.js';
+import {CarsPage} from './pages/cars.js';
+import {DronesPage} from './pages/drones.js';
+import {MapPage} from './pages/map.js';
+
+export class App extends ApplicationBase{
+
+    constructor(){
+        super('Fleet Manager');
+        this.dataService = new FleetDataService();
+        this.dataService.loadData(fleet);
+
+        this.addRoute('Home', new HomePage(), true);
+        this.addRoute('Cars', new CarsPage(), false);
+        this.addRoute('Drones', new DronesPage(), false);
+        this.addRoute('Map', new MapPage(), false);
+
     }
 
-    static getCompany(){
-        console.log('in getCompany');
-    }
-
-    fly(){
-        console.log('Drone ' + this.id + ' is fliying');
-    }
-
-    get id(){
-        return this._id;
-    }
-
-    set id(id){
-        this._id = id;
-    }
-
-    get name(){
-        return this._name;
-    }
-
-    set name(name){
-        this._name = name;
-    }
 }
 
-let drone = new Drone(123,'perro');
-Drone.getCompany();
-drone.fly();
-// with the get method, you can access the property without parenthesis
-console.log('drone: ' + drone.id + ' ' + drone.name);
-// with the set method you can assign a value to the property id (tener en cuenta que el nombre real de esta variable es _id)
-drone.id = 987;
-console.log('drone: ' + drone.id + ' ' + drone.name);
+export let application = new App();
+application.show($('body'));
